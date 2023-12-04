@@ -1,0 +1,58 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "lists.h"
+
+/**
+ * reverse_list - Reverses a linked list.
+ * @head: A pointer to the head of the list.
+ * Return: A pointer to the head of the reversed list.
+ */
+listint_t *reverse_list(listint_t *head) {
+    listint_t *prev = NULL;
+    listint_t *current = head;
+    listint_t *next;
+
+    while (current != NULL) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+
+    return prev;
+}
+
+/**
+ * is_palindrome - Checks if a singly linked list is a palindrome.
+ * @head: A pointer to the head of the list.
+ * Return: 1 if it is a palindrome, 0 otherwise.
+ */
+int is_palindrome(listint_t **head) {
+    listint_t *slow = *head;
+    listint_t *fast = *head;
+    listint_t *second_half;
+    listint_t *reversed_second_half;
+
+    if (*head == NULL || (*head)->next == NULL)
+        return 1;
+
+    // Find the middle of the list using slow and fast pointers
+    while (fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    // Reverse the second half of the list
+    second_half = slow;
+    reversed_second_half = reverse_list(second_half);
+
+    // Compare the first half and the reversed second half
+    while (reversed_second_half != NULL) {
+        if ((*head)->n != reversed_second_half->n)
+            return 0;
+        *head = (*head)->next;
+        reversed_second_half = reversed_second_half->next;
+    }
+
+    return 1;
+}
